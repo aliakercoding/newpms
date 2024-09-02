@@ -1,0 +1,54 @@
+<!-- Body -->
+<div class="container mt-3">
+  <div class="border text-center">
+    <div class="row g-2">
+      <div class="col-10">
+        <div class="p-3">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="p-3">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <hr>
+  <!-- BRANDS Table -->
+  <table class="table table-hover border text-center">
+    <thead>
+      <tr>
+        <th scope="col">المعرف الدولي للصنف</th>
+        <th scope="col">اسم الصنف</th>
+        <th scope="col">رصيد الصنف</th>
+        <th scope="col">تابع لكاتالوج</th>
+        <th scope="col">تابع لقسم</th>
+        <th scope="col">تابع لماركة</th>
+        <th scope="col">عمليات علي الصنف</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each itemrows}}
+      <tr>
+        <th scope="row">{{ITEM_BARCODE}}</th>
+        <td>{{ITEM_NAME}}</td>
+        <td>رصيد الصنف</td>
+        <td>{{CATALOG_NAME}}</td>
+        <td>{{SECTION_NAME}}</td>
+        <td>{{BRAND_NAME}}</td>
+        <td class="d-flex justify-content-center">
+          <a href="/admin/edititems/{{this.ITEM_ID}}" class="btn btn-warning ms-2" data-bs-toggle="tooltip"
+            data-bs-placement="bottom" data-bs-title="تعديل بيانات صنف"><i class="bi bi-pencil"></i></a>
+          <form action="/admin/deleteitems/{{this.ITEM_ID}}?action=DELETE" method="post">
+            <button type="submit" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="حذف الصنف <b>- لا يمكن الرجوع في هذا الإجراء</b>"><i class="bi bi-trash"></i>
+            </button>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</div>
