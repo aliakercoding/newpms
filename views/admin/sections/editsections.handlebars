@@ -1,0 +1,40 @@
+s<!-- Body -->
+<div class="container mt-3">
+    <form action="/admin/sections/editsections/{{listSECTION.SECTION_ID}}?action=PUT" method="post" class="needs-validation"
+        novalidate>
+        <div class="card">
+            <div class="card-header">
+                تعديل بيانات قسم ({{listSECTION.SECTION_NAME}})
+            </div>
+            <div class="card-body">
+                <div class="col">
+                    <!-- SECTION ID -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="sectionid-addon">كود القسم</span>
+                            <input type="text" value="{{listSECTION.SECTION_ID}}" class="form-control" aria-label="sectionid"
+                                aria-describedby="sectionid-addon" disabled>
+                            <div class="pe-2">
+                                <i class="bi bi-info-circle-fill"></i>
+                                يتم إنشاء كود القسم بشكل تلقائي
+                            </div>
+                        </div>
+                </div>
+                <div class="col">
+                    <!-- SECTION NAME -->
+                    <div class="input-group mb-3 has-validation">
+                        <span class="input-group-text" id="sectionName-addon">إسم القسم الجديد</span>
+                        <input name="sectionName" id="sectionName" type="text" value="{{listSECTION.SECTION_NAME}}"
+                            class="form-control" placeholder="مثال: أقراص" aria-label="sectionName"
+                            aria-describedby="sectionName-addon" required>
+                        <div class="invalid-feedback">
+                            من فضلك أدخل إسم قسم صحيح
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-warning">إعتماد التعديلات</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

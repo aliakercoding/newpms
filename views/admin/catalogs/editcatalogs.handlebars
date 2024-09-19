@@ -1,0 +1,40 @@
+<!-- Body -->
+<div class="container mt-3">
+    <form action="/admin/catalogs/editcatalogs/{{listCATALOG.CATALOG_ID}}?action=PUT" method="post" class="needs-validation"
+        novalidate>
+        <div class="card">
+            <div class="card-header">
+                تعديل بيانات كتالوج ({{listCATALOG.CATALOG_NAME}})
+            </div>
+            <div class="card-body">
+                <div class="col">
+                    <!-- CATALOG ID -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="catalogid-addon">كود الكتالوج</span>
+                        <input type="text" value="{{listCATALOG.CATALOG_ID}}" class="form-control"
+                            aria-label="catalogid" aria-describedby="catalogid-addon" disabled>
+                        <div class="pe-2">
+                            <i class="bi bi-info-circle-fill"></i>
+                            يتم إنشاء كود الكتالوج بشكل تلقائي
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- CATALOG NAME -->
+                    <div class="input-group mb-3 has-validation">
+                        <span class="input-group-text" id="catalogName-addon">إسم الكتالوج الجديد</span>
+                        <input name="catalogName" value="{{listCATALOG.CATALOG_NAME}}" id="catalogName" type="text"
+                            class="form-control" placeholder="مثال: أقراص" aria-label="catalogName"
+                            aria-describedby="catalogName-addon" required>
+                        <div class="invalid-feedback">
+                            من فضلك أدخل إسم كتالوج صحيح
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-warning">إعتماد التعديلات</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

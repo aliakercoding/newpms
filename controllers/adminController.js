@@ -11,17 +11,17 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-      res.render("admin/listallitems", { itemrows });
+      res.render("admin/items/listallitems", { itemrows });
     });
   },
 
   definenewitemGetMethod: (req, res) => {
-    let sql = `SELECT * FROM ITEMS LEFT JOIN CATALOGS LEFT JOIN SECTIONS LEFT JOIN BRANDS`;
+    let sql = `SELECT * FROM CATALOGS INNER JOIN SECTIONS INNER JOIN BRANDS`;
     DBConnector.all(sql, (err, itemrows) => {
       if (err) {
         console.log(err);
       }
-      res.render("admin/definenewitem", { itemrows });
+      res.render("admin/items/definenewitem", { itemrows });
     });
   },
 
@@ -65,7 +65,7 @@ module.exports = {
       });
     }
 
-    var prescription_convertor = req.body.BrandSelector ? 1 : 0;
+    let prescription_convertor = req.body.PrescriptionSwitcher ? 1 : 0;
     let item_barcode = req.body.itemBarcode;
     let item_name = req.body.itemName;
     let item_retail_price = req.body.itemPrice;
@@ -95,7 +95,7 @@ module.exports = {
     );
 
     req.flash("success-message", "تم الإعتماد بنجاح");
-    res.redirect("/admin/listallitems");
+    res.redirect("/admin/items/listallitems");
   },
 
   edititemsGetMethod: async (req, res) => {
@@ -114,8 +114,9 @@ module.exports = {
       });
     }
 
-    let listITEM = await getItemsByID(req.params.id);
-    res.render("admin/edititems", { listITEM });
+    const [listITEM] = await getItemsByID(req.params.id);
+
+    res.render("admin/items/edititems", { listITEM });
   },
 
   // CATALOGS CONTROLLING
@@ -125,9 +126,52 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-      res.render("admin/listallcatalogs", { catalogrows });
+      res.render("admin/catalogs/listallcatalogs", { catalogrows });
     });
   },
+
+  definenewcatalogPostMethod: async (req, res) => {
+    function AddNewCatalog(catalog_name) {
+      return new Promise((resolve, reject) => {
+        DBConnector.run(
+          `INSERT INTO CATALOGS(CATALOG_NAME) VALUES(?)`,
+          catalog_name,
+          (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          }
+        );
+      });
+    }
+
+    let catalog_name = req.body.catalogName;
+    await AddNewCatalog(catalog_name);
+    req.flash("success-message", "تم الإعتماد بنجاح");
+    res.redirect("/admin/catalogs/listallcatalogs");
+  },
+
+editcatalogsGetMethod: async (req,res)=>{
+  function getCatalogByID(id) {
+    return new Promise((resolve, reject) => {
+      DBConnector.all(
+        `SELECT * FROM CATALOGS WHERE CATALOG_ID=(?)`,
+        id,
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(rows);
+        }
+      );
+    });
+  }
+
+  const [listCATALOG] = await getCatalogByID(req.params.id);
+
+  res.render("admin/catalogs/editcatalogs", { listCATALOG });
+},
 
   //SECTIONS CONTROLLING
   listallsectionsGetMethod: (req, res) => {
@@ -136,8 +180,51 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-      res.render("admin/listallsections", { sectionrows });
+      res.render("admin/sections/listallsections", { sectionrows });
     });
+  },
+
+  definenewsectionPostMethod: async (req, res) => {
+    function AddNewSection(section_name) {
+      return new Promise((resolve, reject) => {
+        DBConnector.run(
+          `INSERT INTO SECTIONS(SECTION_NAME) VALUES(?)`,
+          section_name,
+          (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          }
+        );
+      });
+    }
+
+    let section_name = req.body.sectionName;
+    await AddNewSection(section_name);
+    req.flash("success-message", "تم الإعتماد بنجاح");
+    res.redirect("/admin/sections/listallsections");
+  },
+
+  editsectionsGetMethod: async (req,res)=>{
+    function getSectionByID(id) {
+      return new Promise((resolve, reject) => {
+        DBConnector.all(
+          `SELECT * FROM SECTIONS WHERE SECTION_ID=(?)`,
+          id,
+          (err, rows) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(rows);
+          }
+        );
+      });
+    }
+  
+    const [listSECTION] = await getSectionByID(req.params.id);
+  
+    res.render("admin/sections/editsections", { listSECTION });
   },
 
   // BRANDS CONTROLLING
@@ -147,7 +234,61 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-      res.render("admin/listallbrands", { brandrows });
+      res.render("admin/brands/listallbrands", { brandrows });
     });
   },
+
+  definenewbrandPostMethod: async (req, res) => {
+    function AddNewBrand(brand_name) {
+      return new Promise((resolve, reject) => {
+        DBConnector.run(
+          `INSERT INTO BRANDS(BRAND_NAME) VALUES(?)`,
+          brand_name,
+          (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          }
+        );
+      });
+    }
+
+    let brand_name = req.body.brandName;
+    await AddNewBrand(brand_name);
+    req.flash("success-message", "تم الإعتماد بنجاح");
+    res.redirect("/admin/brands/listallbrands");
+  },
+
+  editbrandsGetMethod: async (req,res)=>{
+    function getBrandByID(id) {
+      return new Promise((resolve, reject) => {
+        DBConnector.all(
+          `SELECT * FROM BRANDS WHERE BRAND_ID=(?)`,
+          id,
+          (err, rows) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(rows);
+          }
+        );
+      });
+    }
+  
+    const [listBRAND] = await getBrandByID(req.params.id);
+  
+    res.render("admin/brands/editbrands", { listBRAND });
+  },
+
+
+
+
+
+
+
+
+
+
+
 };
